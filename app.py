@@ -1,23 +1,19 @@
 import streamlit as st
 import joblib
 import numpy as np
-import pandas as pd
 
-model = joblib.load("renewable_model.pkl")
+# Load trained model
+model = joblib.load("renewable_model_1.pkl")
 
 st.title("🔆 Tamil Nadu Renewable Energy Forecast")
 
-# Define EXACT feature names used in training
-feature_names = ["Humidity_Pct", "Pressure_mb", "WindSpeed_kmh"]
-
-input_data = []
-
-for feature in feature_names:
-    value = st.number_input(f"Enter {feature}")
-    input_data.append(value)
+humidity = st.number_input("Humidity (%)")
+pressure = st.number_input("Pressure (mb)")
+wind_speed = st.number_input("Wind Speed (km/h)")
 
 if st.button("Predict Energy"):
-    input_array = np.array([input_data])
-    prediction = model.predict(input_array)
 
-    st.success(f"Prediction (Solar, Wind, Total MW): {prediction}")
+    input_data = np.array([[humidity, pressure, wind_speed]])
+    prediction = model.predict(input_data)
+
+    st.success(f"Predicted Energy Output: {prediction}")
